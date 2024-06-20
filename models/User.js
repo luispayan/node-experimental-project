@@ -1,27 +1,35 @@
-const pool = require('../db');
-const bcrypt = require('bcryptjs');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../db');
+
+const UserSchema = sequelize.define('User', {
+  username: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false
+  }
+}, {
+  tableName: 'users',
+  timestamps: false
+});
 
 class User {
   static async createUser(username, password) {
-    const query = 'INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id';
-    const values = [username, password];
-
     try {
-      const result = await pool.query(query, values);
-      // TODO: Add model validations
-      return result.rows[0].id;
+      const user = await UserSchema.create({ username, password });
+      return user.id;
     } catch (error) {
       throw new Error(`Error creating user: ${error}`);
     }
   }
 
   static async getUserByUsername(username) {
-    const query = 'SELECT * FROM users WHERE username = $1';
-    const values = [username];
-
     try {
-      const result = await pool.query(query, values);
-      return result.rows[0];
+      const user = await UserSchema.findOne({ where: { username } });
+      return user;
     } catch (error) {
       throw new Error(`Error retrieving user: ${error}`);
     }

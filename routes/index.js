@@ -1,7 +1,5 @@
 var express = require('express');
 var router = express.Router();
-// TODO: Investigate where can I import dotenv to have access globally
-require('dotenv').config();
 const User = require('../models/User');
 const SECRET_KEY = process.env.SECRET_KEY;
 const bcrypt = require('bcryptjs');
