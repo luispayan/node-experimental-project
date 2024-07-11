@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../db');
+import sequelize from '../db';
 
 const ProductSchema = sequelize.define('Product', {
   name: {
@@ -26,7 +26,7 @@ class Product {
     }
   }
 
-  static async createProduct(data) {
+  static async createProduct(data: any) {
     try {
       const response = await ProductSchema.create(data);
       return response;
@@ -35,7 +35,7 @@ class Product {
     }
   }
 
-  static async updateProduct(productId, data) {
+  static async updateProduct(productId: any, data: any) {
     try {
       const response = await ProductSchema.update(data, {where: {id: productId}});
       return response;
@@ -44,7 +44,7 @@ class Product {
     }
   }
 
-  static async deleteProduct(productId) {
+  static async deleteProduct(productId: any) {
     try {
       const response = await ProductSchema.destroy({where: {id: productId}});
       return response;
@@ -54,4 +54,4 @@ class Product {
   }
 }
 
-module.exports = Product;
+export default Product;

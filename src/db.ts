@@ -7,6 +7,6 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
 
 sequelize.authenticate()
   .then(() => console.log('Database connected...'))
-  .catch(err => console.log('Error: ' + err));
+  .catch((err: any) => console.log('Error: ' + err));
 
-module.exports = sequelize;
+export default sequelize;

@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../db');
+import sequelize from '../db';
 
 const UserSchema = sequelize.define('User', {
   username: {
@@ -17,7 +17,7 @@ const UserSchema = sequelize.define('User', {
 });
 
 class User {
-  static async createUser(username, password) {
+  static async createUser(username: any, password: any) {
     try {
       const user = await UserSchema.create({ username, password });
       return user.id;
@@ -26,7 +26,7 @@ class User {
     }
   }
 
-  static async getUserByUsername(username) {
+  static async getUserByUsername(username: any) {
     try {
       const user = await UserSchema.findOne({ where: { username } });
       return user;
@@ -36,4 +36,4 @@ class User {
   }
 }
 
-module.exports = User;
+export default User;

@@ -1,12 +1,10 @@
 var express = require('express');
 var router = express.Router();
-const User = require('../models/User');
-const SECRET_KEY = process.env.SECRET_KEY;
+import User from '../models/User';
 const bcrypt = require('bcryptjs');
-// TODO move jwt to auth middleware
-const jwt = require('jsonwebtoken');
+import { generateToken } from "../middlewares/auth";
 
-router.post('/login', async (req, res) => {
+router.post('/login', async (req: any, res: any) => {
   const { username, password } = req.body;
 
   try {
@@ -21,15 +19,15 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Invalid password' });
     }
 
-    const token = jwt.sign({ id: user.id }, SECRET_KEY, { expiresIn: '1h' });
+    const token = generateToken(user.id);
     res.status(200).json({ token });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error:', error.message);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
 
-router.post('/register', async (req, res) => {
+router.post('/register', async (req: any, res: any) => {
   const { username, password } = req.body;
 
   try {
@@ -40,11 +38,10 @@ router.post('/register', async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUserId = await User.createUser(username, hashedPassword);
-    console.log(SECRET_KEY);
-    const token = jwt.sign({ id: newUserId }, SECRET_KEY, { expiresIn: '2h' });
+    const token = generateToken(newUserId);
 
     res.status(200).json({ token });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error:', error.message);
     res.status(500).json({ message: 'Internal server error' });
   }
